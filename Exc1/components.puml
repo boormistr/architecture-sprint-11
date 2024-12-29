@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Component>
+
+Container_Boundary(dwh, "DWH") {
+    Component(etl, "ETL/ELT процессы", "Apache Spark", "Трансформация и загрузка данных")
+    Component(data_storage, "Хранилище данных", "SQL Server", "Хранение структурированных данных")
+    Component(data_processing, "Бизнес-логика", "T-SQL", "Обработка запросов")
+}
+
+Container_Boundary(data_lake, "Data Lake") {
+    Component(raw_zone, "Raw Zone", "Storage", "Хранение необработанных данных")
+    Component(processed_zone, "Processed Zone", "Spark/BigQuery", "Обработанные данные")
+    Component(analytics_tools, "Аналитические инструменты", "Power BI/Looker", "Отчеты и визуализация")
+}
+
+Rel(etl, data_storage, "Загрузка данных")
+Rel(data_processing, data_storage, "Доступ к данным")
+Rel(data_processing, analytics_tools, "Передача данных для отчетов")
+@enduml
