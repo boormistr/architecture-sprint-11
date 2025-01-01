@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+
+Container_Boundary(dwhBoundary, "DWH (MS SQL Server)") {
+    Component(dwh_storage, "Data Storage", "SQL Server (Tables, Schemas)", "Структурированные данные")
+    Component(dwh_processing, "Business Logic (T-SQL)", "Stored Procedures / Views", "Бизнес-логика")
+    Component(legacy_ui, "Legacy UI (Power Builder)", "Desktop App", "Интерфейс операторов")
+    Component(etl_jobs_legacy, "ETL Jobs (SSIS/DTS)", "Microsoft SSIS / DTS", "Загрузка данных")
+}
+
+Rel(dwh_storage, dwh_processing, "Чтение/запись")
+Rel(dwh_processing, legacy_ui, "Формирование данных для UI")
+Rel(etl_jobs_legacy, dwh_storage, "Загрузка в DWH")
+
+Container_Boundary(dlBoundary, "Data Lake") {
+    Component(dl_raw_zone, "Raw Zone", "Object Storage (HDFS / S3 / etc.)", "Сырой слой")
+    Component(dl_processed_zone, "Processed Zone", "Parquet/Tables (Spark/Hive/BigQuery)", "Обработанные данные")
+    Component(etl_spark, "ETL/ELT Workloads (Spark)", "Spark / Python / Scala", "Трансформация")
+}
+
+Rel(etl_spark, dl_raw_zone, "Чтение сырых данных")
+Rel(etl_spark, dl_processed_zone, "Запись обработанных данных")
+
+Container_Boundary(biBoundary, "BI-система (Power BI)") {
+    Component(bi_desktop, "Power BI Desktop / Web", "Платформа", "Создание и просмотр дашбордов")
+    Component(bi_datasets, "Data Models / Datasets", "Power BI datasets", "Модели данных")
+    Component(bi_reports, "Reports / Dashboards", "Power BI Reports", "Отчёты и дашборды")
+}
+
+Rel(bi_desktop, bi_datasets, "Создание и публикация моделей")
+Rel(bi_datasets, bi_reports, "Формирование отчётов")
+
+Rel(etl_jobs_legacy, dl_raw_zone, "Выгрузка из DWH")
+Rel(etl_spark, dwh_storage, "Чтение данных из DWH")
+Rel(bi_datasets, dl_processed_zone, "Чтение обработанных данных")
+Rel(bi_datasets, dwh_storage, "Прямое чтение данных из DWH")
+
+@enduml

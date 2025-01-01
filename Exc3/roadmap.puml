@@ -1,0 +1,18 @@
+@startuml
+start
+:Q1 2024: Перевод шины данных на Kafka;
+:Q1 2024: Создание Data Lake (Raw Zone);
+if (Q2 2024: Внедрение портала?) then (да)
+  :Q2 2024: Подключение ETL процессов (Spark);
+  :Q2 2024: Тестирование Snowflake;
+else
+  stop
+endif
+:Q3 2024: Отключение Apache Camel;
+:Q3 2024: Миграция данных в Data Lake (Processed Zone);
+:Q3 2024: Внедрение Looker;
+:Q4 2024: Удаление DWH;
+:Q4 2024: Перевод BI отчетов на Data Lake;
+:Q4 2024: Эксперименты с Databricks;
+stop
+@enduml

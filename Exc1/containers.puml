@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Container>
+
+Container_Boundary(system, "Будущее 2.0") {
+    Container(dwh, "DWH", "MS SQL Server", "Хранение основных бизнес-данных и историй (Legacy)")
+    Container(data_lake, "Data Lake", "Hadoop / Cloud Storage / Spark / BigQuery", "Современное хранилище для больших данных")
+    Container(bi, "BI-система", "Power BI", "Аналитика и отчёты")
+    Container(data_portal, "Портал самообслуживания", "Web App", "Конструирование и получение отчётов")
+    Container(fintech, "Финтех-сервисы", "Java/Golang", "Финансовые операции")
+    Container(ai_services, "ИИ-сервисы", "Python", "Анализ медицинских данных")
+    Container(internal_services, "Внутренние сервисы", "Различные технологии", "Управление внутренними процессами")
+    Container(data_hub, "Интеграционная шина", "Apache Camel", "Передача данных между системами")
+}
+
+Rel(fintech, data_hub, "Передача финансовых данных")
+Rel(ai_services, data_hub, "Передача медицинских данных")
+Rel(internal_services, data_hub, "Передача внутренних данных")
+Rel(data_hub, dwh, "Загрузка данных (Legacy)")
+Rel(dwh, bi, "Чтение данных для аналитики")
+Rel(dwh, data_portal, "Чтение данных (Legacy)")
+Rel(data_portal, bi, "Использует BI-систему для визуализации")
+Rel(data_hub, data_lake, "Загрузка данных для анализа")
+
+@enduml

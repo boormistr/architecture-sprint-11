@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Context>
+
+System_Boundary(FinancialDomain, "Финансовый домен") {
+    System(fintech_services, "Финтех-сервисы", "Java/Golang", "Финансовые операции")
+    System(financial_db, "База данных финансов", "PostgreSQL", "Финансовые данные и кредитные истории")
+}
+
+System_Boundary(MedicalDomain, "Медицинский домен") {
+    System(medical_data, "Медицинские данные", "SQL Server", "Карты и истории болезней")
+    System(ai_services, "ИИ-сервисы", "Python", "Анализ медицинских данных")
+}
+
+System_Boundary(AnalyticsDomain, "Домен аналитики") {
+    System(data_lake, "Data Lakehouse", "BigQuery/Spark", "Хранилище больших данных")
+    System(bi_system, "BI-система", "Power BI", "Отчеты и аналитика")
+    System(data_portal, "Портал самообслуживания", "Web App", "Конструирование отчетов")
+}
+
+System_Boundary(IntegrationDomain, "Интеграционный домен") {
+    System(data_hub, "Шина данных", "Kafka", "Передача данных между системами")
+}
+
+Rel(fintech_services, financial_db, "Передача данных о транзакциях")
+Rel(financial_db, data_hub, "Экспорт данных в шину")
+Rel(medical_data, ai_services, "Передача данных для анализа")
+Rel(medical_data, data_hub, "Экспорт данных в шину")
+Rel(ai_services, data_hub, "Результаты анализа")
+Rel(data_hub, data_lake, "Передача данных для аналитики")
+Rel(data_lake, bi_system, "Обработанные данные для отчетов")
+Rel(data_lake, data_portal, "Данные для построения пользовательских отчетов")
+@enduml
