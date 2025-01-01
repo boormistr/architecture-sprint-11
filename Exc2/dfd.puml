@@ -12,7 +12,7 @@ System_Boundary(MedicalDomain, "Медицинский домен") {
 }
 
 System_Boundary(AnalyticsDomain, "Домен аналитики") {
-    System(data_lake, "Data Lake", "BigQuery/Spark", "Хранилище больших данных")
+    System(data_lake, "Data Lakehouse", "BigQuery/Spark", "Хранилище больших данных")
     System(bi_system, "BI-система", "Power BI", "Отчеты и аналитика")
     System(data_portal, "Портал самообслуживания", "Web App", "Конструирование отчетов")
 }
